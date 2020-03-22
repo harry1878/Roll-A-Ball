@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
     {
         get
         {
-            if (instance == null) instance = new CameraController();
+            if (instance == null) instance = FindObjectOfType<CameraController>();
             return instance;
         }
     }

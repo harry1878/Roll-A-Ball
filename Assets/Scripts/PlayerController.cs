@@ -10,15 +10,21 @@ public class PlayerController : MonoBehaviour
     public Text WinText;
     public Button RestartButton;
     public GameObject player;
+    //public Transform[] coin;
 
     private Rigidbody rb;
     private int count;
     private float time = 0;
+    private Rotator[] golds = null; 
 
-
-    void Start()
+    private void Start()
     {
+        golds = FindObjectsOfType<Rotator>();
         rb = GetComponent<Rigidbody>();
+    }
+
+    void Awake()
+    {
         count = 0;
         SetCountText();
         WinText.gameObject.SetActive(false);
@@ -26,7 +32,7 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        if(count >=2)
+        if(count >= golds.Length)
         {
             time += Time.deltaTime;
         }
@@ -56,7 +62,7 @@ public class PlayerController : MonoBehaviour
     void SetCountText()
     {
         CountText.text = "Count: " + count.ToString();
-        if(count >=2)
+        if(count >= golds.Length)
         {
             CountText.gameObject.SetActive(false);
             WinText.gameObject.SetActive(true);
@@ -65,22 +71,22 @@ public class PlayerController : MonoBehaviour
     }
     public void Restart()
     {
+        Awake();
         count = 0;
         time = 0;
-        SetCountText();
+        CountText.gameObject.SetActive(true);
         player.transform.position = new Vector3(0, 0.5f, 0);
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.Sleep();
-        GameObject test = GameObject.FindGameObjectWithTag("Pick Up");
-        test.gameObject.SetActive(true);
-        GameObject[] PickUps = GameObject.FindGameObjectsWithTag("Pick Up");
-        foreach(GameObject i in PickUps)
+        //for(int i = 0; i < coin.Length; ++i)
+        //{
+        //    coin[i].gameObject.SetActive(true);
+        //}
+        for(int i =0; i < golds.Length; ++i)
         {
-            i.gameObject.SetActive(true);
+            golds[i].transform.localRotation = Quaternion.identity;
+            golds[i].gameObject.SetActive(true);
         }
-        CountText.gameObject.SetActive(true);
-        WinText.gameObject.SetActive(false);
-        RestartButton.gameObject.SetActive(false);
     }
 }
